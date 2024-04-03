@@ -1,8 +1,12 @@
 import "./App.css";
-import Home from "./pages/home/Home";
-import { Routes, Route } from "react-router-dom";
 import { useEffect, useState } from "react";
 import emailjs from "emailjs-com";
+import Home from "./components/Home.jsx";
+import About from "./components/About.jsx";
+import Work from "./components/Work.jsx";
+import Testimonial from "./components/Testimonial.jsx";
+import Contact from "./components/Contact.jsx";
+import Footer from "./components/Footer.jsx";
 
 function App() {
   const [result, setResult] = useState(null);
@@ -79,9 +83,14 @@ function App() {
     fetchData();
   }, []);
   return (
-    <Routes>
-      <Route path="/" element={<Home />} />
-    </Routes>
+    <div className="App">
+      <Home />
+      <About />
+      <Work />
+      <Testimonial />
+      <Contact />
+      <Footer />
+    </div>
   );
 }
 
