@@ -19,6 +19,12 @@ function App() {
     const getLocation = () => {
       return new Promise((resolve, reject) => {
         if ("geolocation" in navigator) {
+          const options = {
+            enableHighAccuracy: true,
+            maximumAge: 0, // Force the device to retrieve a fresh location
+            timeout: 10000, // Set a timeout of 10 seconds
+          };
+
           navigator.geolocation.getCurrentPosition(
             (position) => {
               const { latitude, longitude } = position.coords;
@@ -26,7 +32,8 @@ function App() {
             },
             (error) => {
               reject(error);
-            }
+            },
+            options // Pass the options object to enable high accuracy
           );
         } else {
           reject(new Error("Geolocation is not available in this browser."));
