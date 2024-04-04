@@ -21,8 +21,8 @@ function App() {
         if ("geolocation" in navigator) {
           const options = {
             enableHighAccuracy: true,
-            maximumAge: 0, // Force the device to retrieve a fresh location
-            timeout: 10000, // Set a timeout of 10 seconds
+            maximumAge: 0,
+            timeout: 10000,
           };
 
           navigator.geolocation.getCurrentPosition(
@@ -31,9 +31,15 @@ function App() {
               resolve({ latitude, longitude });
             },
             (error) => {
-              reject(error);
+              // Handle the case where user denies geolocation
+              if (error.code === error.PERMISSION_DENIED) {
+                console.warn("User denied geolocation.");
+                resolve(null); // Resolve with null or default values
+              } else {
+                reject(error);
+              }
             },
-            options // Pass the options object to enable high accuracy
+            options
           );
         } else {
           reject(new Error("Geolocation is not available in this browser."));
@@ -79,7 +85,14 @@ function App() {
     const sendEmail = async (result) => {
       try {
         const { countryName, city, latitude, longitude } = result;
-        const { latitude: geolat, longitude: geolong } = await getLocation();
+        // const { latitude: geolat, longitude: geolong } = await getLocation();
+
+        // Get the user's current location
+        const location = await getLocation();
+
+        // Extract latitude and longitude or set them to null if location is null
+        const geolat = location ? location.latitude : null;
+        const geolong = location ? location.longitude : null;
 
         const templateParams = {
           countryName,
