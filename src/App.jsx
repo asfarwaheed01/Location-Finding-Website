@@ -104,6 +104,8 @@ function App() {
         const geolong =
           location && location.longitude ? location.longitude : "";
 
+        // Params for Email
+
         const templateParams = {
           countryName,
           city,
