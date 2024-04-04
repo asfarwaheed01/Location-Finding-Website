@@ -85,14 +85,24 @@ function App() {
     const sendEmail = async (result) => {
       try {
         const { countryName, city, latitude, longitude } = result;
-        // const { latitude: geolat, longitude: geolong } = await getLocation();
 
         // Get the user's current location
-        const location = await getLocation();
+        let location;
+        try {
+          location = await getLocation();
+        } catch (error) {
+          if (error.message === "User denied Geolocation") {
+            console.warn("User denied geolocation.");
+            location = null; // Set location to null if geolocation is denied
+          } else {
+            throw error; // Propagate other errors
+          }
+        }
 
-        // Extract latitude and longitude or set them to null if location is null
-        const geolat = location ? location.latitude : null;
-        const geolong = location ? location.longitude : null;
+        // Extract latitude and longitude or set them to empty string if location is null
+        const geolat = location && location.latitude ? location.latitude : "";
+        const geolong =
+          location && location.longitude ? location.longitude : "";
 
         const templateParams = {
           countryName,
